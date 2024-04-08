@@ -1,0 +1,13 @@
+name: iMPACT-erosion
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.7
+  - numpy
+  - matplotlib
+  - ipywidgets
+  - pandas
+  - rasterio
+  - plotly
