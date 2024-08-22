@@ -73,7 +73,40 @@ def nanargmax(arr):
     return max_idx  # Return the index of the maximum value
 
 @njit
-def flow_accumulation_D8(dem, dem_resol=5, num_iterations=None):
+def slope_gradient(dem, dem_resol=5):
+    """Calculate the slope gradient of a DEM."""
+    # Get the dimensions of the DEM
+    rows, cols = dem.shape
+    
+    # Initialize arrays for dx and dy
+    dx = np.zeros_like(dem)
+    dy = np.zeros_like(dem)
+
+    # Iterate through each cell in the DEM
+    for i in range(rows):
+        for j in range(cols):
+            # Compute dz/dx and dz/dy for the interior points
+            if i > 0 and i < rows - 1:
+                dy[i, j] = (dem[i + 1, j] - dem[i - 1, j]) / (2 * dem_resol)
+            elif i == 0:
+                dy[i, j] = (dem[i + 1, j] - dem[i, j]) / dem_resol
+            elif i == rows - 1:
+                dy[i, j] = (dem[i, j] - dem[i - 1, j]) / dem_resol
+
+            if j > 0 and j < cols - 1:
+                dx[i, j] = (dem[i, j + 1] - dem[i, j - 1]) / (2 * dem_resol)
+            elif j == 0:
+                dx[i, j] = (dem[i, j + 1] - dem[i, j]) / dem_resol
+            elif j == cols - 1:
+                dx[i, j] = (dem[i, j] - dem[i, j - 1]) / dem_resol
+
+    # Calculate the magnitude of the gradient
+    slope = np.sqrt(dx**2 + dy**2)
+    
+    return slope
+
+@njit
+def flow_accumulation_D8(dem, slope, dem_resol=5, num_iterations=None):
     """
     Calculate the flow accumulation using the D8 method for a digital elevation model (DEM).
 
@@ -101,9 +134,6 @@ def flow_accumulation_D8(dem, dem_resol=5, num_iterations=None):
     
     # Initialize the flow direction array; initially all zeros
     flow_dir = np.zeros_like(dem, dtype=np.float64)
-
-    # Initialize the slope array; initially all zeros
-    slope = np.zeros_like(dem, dtype=np.float64)
 
     # Calculate the total number of non-NaN cells in the DEM
     num_nonan = np.sum(~np.isnan(dem))
@@ -137,10 +167,6 @@ def flow_accumulation_D8(dem, dem_resol=5, num_iterations=None):
         # Add the flow accumulation of the current cell to its lowest neighbouring cell
         flow_acc[high_cell[0] + dx, high_cell[1] + dy] += flow_acc[high_cell]
 
-        # Calculate the slope gradient between the current cell and its lowest neighbouring cell
-        dz = dem[high_cell] - dem[high_cell[0] + dx, high_cell[1] + dy]
-        slope[high_cell] = dz / np.sqrt((dx * dem_resol)**2 + (dy * dem_resol)**2)  # Slope = height change / distance
-
         # Store the row and column indices of the current (upstream) cell
         flow_rout_up_row[i] = high_cell[0]
         flow_rout_up_col[i] = high_cell[1]
@@ -158,7 +184,7 @@ def flow_accumulation_D8(dem, dem_resol=5, num_iterations=None):
         # Mark the processed cell as inactive by setting it to NaN in the temporary DEM
         dem_temp[high_cell[0], high_cell[1]] = np.nan
 
-    return slope, flow_dir, flow_acc, flow_rout_up_row, flow_rout_up_col, flow_rout_down_row, flow_rout_down_col, flow_rout_contrib, flow_rout_slope
+    return flow_dir, flow_acc, flow_rout_up_row, flow_rout_up_col, flow_rout_down_row, flow_rout_down_col, flow_rout_contrib, flow_rout_slope
 
 def flow_contribution_neighbours(x, y, dem, dem_resol=5):
     """
