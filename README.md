@@ -16,3 +16,6 @@ The iMPACT-test is a set of Notebooks explaining and implementing the necessary 
 
 3. iMPACT-Explore
 The iMPACT-explore is a set of Notebooks explaining and implementing the necessary tasks to simulate and explore a soil erosion system under different conditions and scenarios, to evaluate the efficiency of mitigation strategies and identify the most influential factors.
+
+### Acknowledgements
+This project is funded by the European Research Executive Agency (REA) under the HORIZON-MSCA-2021-PF-01 grant agreement 101062258
