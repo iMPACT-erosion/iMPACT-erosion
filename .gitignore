@@ -153,3 +153,8 @@ SAFEpython*/
 *v0.ipynb
 *_v*.ipynb
 *v0.*
+
+# Hydrological analysis rasters
+flow_acc/
+flow_dir/
+slope/
