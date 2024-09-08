@@ -8,13 +8,16 @@ iMPACT-erosion offers a comprehensive set of interactive Jupyter Notebooks and P
 
 Important: we have included links to run iMPACT Notebooks on the cloud by using Binder, so that they are accessible by a web browser without requiring any local installation.
 
-1. iMPACT-Start
+**1. iMPACT-Start**
+
 The iMPACT-Start is a set of Notebooks explaining and implementing the starting soil erosion modelling tasks: fill sinks of the digital elevation model (DEM), calculate the flow accumulation of the surface water flow, catchment delineation to define the area of study and soil erosion modelling at the catchment scale
 
-2. iMPACT-Test
+**2. iMPACT-Test**
+
 The iMPACT-test is a set of Notebooks explaining and implementing the necessary tasks to calibrate and evaluate a soil erosion model.
 
-3. iMPACT-Explore
+**3. iMPACT-Explore**
+
 The iMPACT-explore is a set of Notebooks explaining and implementing the necessary tasks to simulate and explore a soil erosion system under different conditions and scenarios, to evaluate the efficiency of mitigation strategies and identify the most influential factors.
 
 ### Acknowledgements
