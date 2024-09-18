@@ -72,38 +72,7 @@ def nanargmax(arr):
 
     return max_idx  # Return the index of the maximum value
 
-@njit
-def slope_gradient(dem, dem_resol=5):
-    """Calculate the slope gradient of a DEM."""
-    # Get the dimensions of the DEM
-    rows, cols = dem.shape
-    
-    # Initialize arrays for dx and dy
-    dx = np.zeros_like(dem)
-    dy = np.zeros_like(dem)
 
-    # Iterate through each cell in the DEM
-    for i in range(rows):
-        for j in range(cols):
-            # Compute dz/dx and dz/dy for the interior points
-            if i > 0 and i < rows - 1:
-                dy[i, j] = (dem[i + 1, j] - dem[i - 1, j]) / (2 * dem_resol)
-            elif i == 0:
-                dy[i, j] = (dem[i + 1, j] - dem[i, j]) / dem_resol
-            elif i == rows - 1:
-                dy[i, j] = (dem[i, j] - dem[i - 1, j]) / dem_resol
-
-            if j > 0 and j < cols - 1:
-                dx[i, j] = (dem[i, j + 1] - dem[i, j - 1]) / (2 * dem_resol)
-            elif j == 0:
-                dx[i, j] = (dem[i, j + 1] - dem[i, j]) / dem_resol
-            elif j == cols - 1:
-                dx[i, j] = (dem[i, j] - dem[i, j - 1]) / dem_resol
-
-    # Calculate the magnitude of the gradient
-    slope = np.sqrt(dx**2 + dy**2)
-    
-    return slope
 
 @njit
 def flow_accumulation_D8(dem, slope, dem_resol=5, num_iterations=None):
