@@ -6,7 +6,6 @@
 import numpy as np  # for numerical operations, especially with arrays
 import matplotlib.pyplot as plt  # for data visualization
 from scipy.stats import gamma, norm # for statistical distributions
-from sklearn.metrics import mean_squared_error  # for evaluating model accuracy with mean squared error
 
 def plot_normal_fitting(temp_data, mean, std_dev):
 
@@ -26,7 +25,7 @@ def plot_normal_fitting(temp_data, mean, std_dev):
     
     # Interpolate fitted CDF to the data points for MSE calculation
     interpolated_cdf_fitted = np.interp(sorted_temp_data, x_temp, cdf_fitted)
-    mse_cdf = mean_squared_error(empirical_cdf, interpolated_cdf_fitted)
+    mse_cdf = np.square(np.subtract(empirical_cdf, interpolated_cdf_fitted)).mean() 
     
     # Create a figure with a gridspec layout
     fig = plt.figure(figsize=(16, 10))
@@ -89,7 +88,7 @@ def plot_gamma_fitting(rain_data,alpha, beta):
     
     # Interpolate fitted CDF to the data points for MSE calculation
     interpolated_cdf_fitted = np.interp(sorted_data, x_rain, cdf_fitted)
-    mse_cdf = mean_squared_error(empirical_cdf, interpolated_cdf_fitted)
+    mse_cdf = np.square(np.subtract(empirical_cdf, interpolated_cdf_fitted)).mean() 
     
     # Create a figure with a gridspec for the narrow top and wide bottom plot
     fig = plt.figure(figsize=(16, 10))
