@@ -13,3 +13,4 @@ dependencies:
   - plotly
   - numba
   - scipy
+  - openpyxl
