@@ -137,7 +137,6 @@ ppt_files/
 
 # Word and Excel files
 *.docx
-*.xlsx
 
 # Poetry
 pyproject.toml
