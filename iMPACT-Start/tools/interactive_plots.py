@@ -33,22 +33,22 @@ def plot_normal_fitting(temp_data, mean, std_dev):
     
     # Plot histogram and fitted Normal PDF
     ax0 = fig.add_subplot(gs[0, 0])  # Top left plot
-    ax0.hist(non_missing_temp_data, bins=30, density=True, color='darkgreen', label='Temperature Data (no gaps)')
-    ax0.plot(x_temp, pdf_fitted, color='green', lw=3, label=f'Fitted Normal: mean={mean:.2f}, std={std_dev:.2f}')
-    ax0.set_title('Normal PDF Fitting')
-    ax0.set_xlabel('Temperature (°C)')
-    ax0.set_ylabel('Density')
+    ax0.hist(non_missing_temp_data, bins=30, density=True, color='red', label='Temperature Data (no gaps)')
+    ax0.plot(x_temp, pdf_fitted, color='salmon', lw=3, label=f'Fitted Normal: mean={mean:.2f}, std={std_dev:.2f}')
+    ax0.set_title('Normal PDF Fitting', fontsize=20)
+    ax0.set_xlabel('Temperature (°C)', fontsize=20)
+    ax0.set_ylabel('Density', fontsize=20)
     ax0.set_ylim([0, 0.08])
-    ax0.legend()
+    ax0.legend(fontsize=15)
     
     # Plot empirical CDF and fitted Normal CDF
     ax1 = fig.add_subplot(gs[0, 1])  # Top right plot
-    ax1.plot(sorted_temp_data, empirical_cdf, marker='.', linestyle='none', color='darkgreen', label='Empirical CDF of Temperature Data')
-    ax1.plot(sorted_temp_data, interpolated_cdf_fitted, color='green', lw=2, label=f'Fitted Normal CDF: mean={mean:.2f}, std={std_dev:.2f}')
-    ax1.set_title(f'Normal CDF Fitting\nMSE: {mse_cdf:.4f}')
-    ax1.set_xlabel('Temperature (°C)')
-    ax1.set_ylabel('Cumulative Probability')
-    ax1.legend()
+    ax1.plot(sorted_temp_data, empirical_cdf, marker='.', linestyle='none', color='red', label='Empirical CDF')
+    ax1.plot(sorted_temp_data, interpolated_cdf_fitted, color='salmon', lw=2, label=f'Fitted Normal CDF: mean={mean:.2f}, std={std_dev:.2f}')
+    ax1.set_title(f'Normal CDF Fitting - MSE: {mse_cdf:.4f}', fontsize=20)
+    ax1.set_xlabel('Temperature (°C)', fontsize=20)
+    ax1.set_ylabel('Cumulative Probability', fontsize=20)
+    ax1.legend(fontsize=15)
     
     # Generate random values for missing temperature values based on the fitted Normal distribution
     missing_temp_indices = temp_data[temp_data['temp'].isna()].index
@@ -60,11 +60,11 @@ def plot_normal_fitting(temp_data, mean, std_dev):
 
     # Plot the original and filled temperature data
     ax2 = fig.add_subplot(gs[1, :])  # Bottom full-width plot
-    ax2.plot(filled_temp_data, color='green', label='Filled Data')
-    ax2.plot(temp_data, color='darkgreen', label='Observed Data')
-    ax2.set_ylabel('Temperature (°C)')
+    ax2.plot(filled_temp_data, color='salmon', label='Filled Data')
+    ax2.plot(temp_data, color='red', label='Observed Data')
+    ax2.set_ylabel('Temperature (°C)', fontsize=20)
     ax2.set_ylim([-10, 40])
-    ax2.legend()
+    ax2.legend(fontsize=15)
     
     plt.tight_layout()
     plt.show()
@@ -98,19 +98,19 @@ def plot_gamma_fitting(rain_data,alpha, beta):
     ax0 = fig.add_subplot(gs[0, 0])  # Top left plot
     ax0.hist(rain_data['rain'], bins=100, density=True, color = 'blue', label='Rainfall Data (with filled gaps)')
     ax0.plot(x_rain, pdf_fitted, lw=3, label=f'Fitted Gamma: shape={alpha:.2f}, scale={beta:.2f}')
-    ax0.set_title('Gamma PDF Fitting')
-    ax0.set_xlabel('Rainfall (mm)')
-    ax0.set_ylabel('Density')
-    ax0.legend()
+    ax0.set_title('Gamma PDF Fitting', fontsize=20)
+    ax0.set_xlabel('Rainfall (mm)', fontsize=20)
+    ax0.set_ylabel('Density', fontsize=20)
+    ax0.legend(fontsize=15)
     
     # Plot empirical CDF and fitted Gamma CDF
     ax1 = fig.add_subplot(gs[0, 1])  # Top right plot
     ax1.plot(sorted_data, empirical_cdf, marker='.', linestyle='none', color='blue',label='Empirical CDF of Rainfall Data')
     ax1.plot(sorted_data, interpolated_cdf_fitted, lw=2, label=f'Fitted Gamma CDF: shape={alpha:.2f}, scale={beta:.2f}')
-    ax1.set_title(f'Gamma CDF Fitting\nMSE: {mse_cdf:.4f}')
-    ax1.set_xlabel('Rainfall (mm)')
-    ax1.set_ylabel('Cumulative Probability')
-    ax1.legend()
+    ax1.set_title(f'Gamma CDF Fitting\nMSE: {mse_cdf:.4f}', fontsize=20)
+    ax1.set_xlabel('Rainfall (mm)', fontsize=20)
+    ax1.set_ylabel('Cumulative Probability', fontsize=20)
+    ax1.legend(fontsize=15)
     
     # Generate random values for missing rainfall values based on the fitted Gamma distribution
     missing_rain_indices = rain_data[rain_data['rain'].isna()].index
@@ -125,8 +125,8 @@ def plot_gamma_fitting(rain_data,alpha, beta):
     ax2 = fig.add_subplot(gs[1, :])  # Bottom full-width plot
     ax2.plot(filled_rain_data, label='Filled Data')
     ax2.plot(rain_data, color='blue', label='Observed Data')
-    ax2.set_ylabel('Rainfall (mm)')
-    ax2.legend()
+    ax2.set_ylabel('Rainfall (mm)', fontsize=20)
+    ax2.legend(fontsize=15)
     ax2.set_ylim([0, 100])
     
     plt.tight_layout()
