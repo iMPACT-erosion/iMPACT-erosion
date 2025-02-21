@@ -40,6 +40,15 @@ def open_raster(path,input_file):
         raster_metadata = src.meta
     return raster, raster_metadata
 
+# Function to load raster data
+def load_raster(filepath):
+    with rasterio.open(filepath) as src:
+        array = src.read(1)
+        array[array == src.nodata] = np.nan
+        transform = src.transform
+        crs = src.crs
+    return array, transform, crs
+
 def save_as_raster(path,name,data,metadata):
     # Specify the output file path and name
     output_file = path+name
