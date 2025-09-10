@@ -131,3 +131,59 @@ def plot_gamma_fitting(rain_data,alpha, beta):
     
     plt.tight_layout()
     plt.show()
+
+# Function to display the interactive plot
+def plot_interactive_K(silt, clay, organic_matter, structure, permeability):
+    
+    K1, Ks, Kp, K = soil_erodibility(silt, clay, organic_matter, structure, permeability)
+    
+    soil_texture = soil_texture_calculator(silt,clay)
+    
+    # Create a figure with 4 bars (K1, Ks, Kp, Total K)
+    fig, ax = plt.subplots(figsize=(7, 4))
+    bar_width = 0.4  # Set width for bars
+    index = [0, 0.5, 1, 2]  # Positions for the bars on the x-axis
+    
+    ax.bar(index[0], K1, bar_width, color="skyblue", label="K1 (Texture)")
+    ax.bar(index[1], Ks, bar_width, color="lightgreen", label="Ks (Structure)")
+    ax.bar(index[2], Kp, bar_width, color="lightcoral", label="Kp (Permeability)")
+    ax.bar(index[3], K, bar_width*2, color="lightblue", label="Total K")
+    
+    ax.set_xticks(index)
+    ax.set_xticklabels(["K1", "Ks", "Kp", "Total K"])
+    ax.set_xlim(-0.5, 2.5)
+    ax.set_ylim(-0.01, 0.1)  # Set y-axis limit to avoid bars going too high
+    ax.set_ylabel('(t ha h) / (ha MJ mm)')
+    
+    ax.set_title(f"Soil Erodibility Factor (K): {K:.3f} - Soil texture: {soil_texture}",fontweight='bold')
+    ax.legend(loc="upper left")
+    plt.show()
+
+def plot_interactive_CP(land_use, canopy_cover, ground_residue, support_practice, slope):
+    C = calculate_c_factor(land_use, canopy_cover, ground_residue)
+    P = calculate_p_factor(support_practice, slope)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    factors = ['C-Factor', 'P-Factor']
+    values = [C, P]
+
+    bars = ax.bar(factors, values, color=['olivedrab', 'sandybrown'], width=0.5)
+
+    ax.set_ylabel('Factor Value (Dimensionless)')
+    ax.set_title('Estimated C and P Factors', fontweight='bold')
+    ax.set_ylim(0, 1.1) # P and C factors are between 0 and 1
+
+    # Add text labels on bars
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2.0, yval + 0.02, f'{yval:.3f}', ha='center', va='bottom')
+
+    # Display input summary
+    inputs_summary = (f"Inputs:\n"
+                      f" C-Factor: Land Use='{land_use}', Canopy={canopy_cover:.0f}%, Residue={ground_residue:.0f}%\n"
+                      f" P-Factor: Practice='{support_practice}', Slope={slope:.1f}%")
+    fig.text(0.5, -0.05, inputs_summary, ha='center', va='bottom', fontsize=9, wrap=True)
+
+    plt.tight_layout(rect=[0, 0.05, 1, 1]) # Adjust layout to make space for fig.text
+    plt.show()
