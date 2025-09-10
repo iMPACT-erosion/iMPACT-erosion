@@ -51,3 +51,29 @@ def rainfall_energy(total_rain, canopy_cover, rain_intensity, plant_height):
     rain_energy = DT_energy + LD_energy
     
     return rain_energy
+      
+# --- EI30 calculation function ---
+def calculate_ei30(event_group):
+    total_rain = event_group['rain'].sum()
+    max_15 = event_group['rain'].rolling(3, min_periods=1).sum().max()
+    max_30 = event_group['rain'].rolling(6, min_periods=1).sum().max()
+    
+    # Check erosive event criteria
+    if (total_rain < 12.7) and not ((max_15 >= 6.35) or (max_30 >= 12.7)):
+        return 0.0
+    
+    # Intensities
+    I10 = event_group['rain'] / (10/60)  # mm/h
+    ir = I10  # interval intensity
+    
+    # Unit rainfall energy (MJ/ha/mm)
+    er = 0.29 * (1 - 0.72 * np.exp(-0.05 * ir))
+    vr = event_group['rain']  # mm per interval
+    
+    # Total event energy
+    E = (er * vr).sum()
+    
+    # Max 30-min intensity (sum of 3 consecutive 10-min intensities)
+    I30 = I10.rolling(3, min_periods=1).sum().max()
+    
+    return E * I30 if pd.notnull(I30) else 0.0
